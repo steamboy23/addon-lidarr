@@ -1,5 +1,5 @@
 # Base image
-FROM hotio/lidarr:pr-plugins
+FROM hotio/lidarr:pr-plugins-2.9.0.4506
 
 
 # Set shell
