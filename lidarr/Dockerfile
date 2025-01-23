@@ -1,10 +1,22 @@
+# Base image
 FROM hotio/lidarr:pr-plugins-2.9.0.4506
-RUN curl -sSLf https://github.com/hassio-addons/bashio/releases/download/v0.15.0/bashio-0.15.0-linux-x86_64.tar.gz | tar xz -C /usr/local/bin
 
-# Copy root filesystem (optional, keep if you have custom configs)
+# Install bashio
+RUN ARCH=$(uname -m) && \
+    if [ "$ARCH" = "x86_64" ]; then \
+        curl -sSLf https://github.com/hassio-addons/bashio/releases/download/v0.15.0/bashio-0.15.0-linux-x86_64.tar.gz | tar xz -C /usr/local/bin; \
+    elif [ "$ARCH" = "aarch64" ]; then \
+        curl -sSLf https://github.com/hassio-addons/bashio/releases/download/v0.15.0/bashio-0.15.0-linux-aarch64.tar.gz | tar xz -C /usr/local/bin; \
+    elif [ "$ARCH" = "armv7l" ]; then \
+        curl -sSLf https://github.com/hassio-addons/bashio/releases/download/v0.15.0/bashio-0.15.0-linux-armv7.tar.gz | tar xz -C /usr/local/bin; \
+    else \
+        echo "Unsupported architecture $ARCH"; exit 1; \
+    fi
+
+# Optional: Copy root filesystem (if required for your add-on)
 COPY rootfs /
 
-# Labels
+# Labels (modify as needed)
 LABEL \
     io.hass.name="Lidarr" \
     io.hass.description="A Lidarr music manager for Home Assistant" \
