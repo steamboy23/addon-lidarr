@@ -3,7 +3,9 @@ FROM hotio/lidarr:pr-plugins-2.9.0.4506
 
 
 # Set shell
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+#SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+ENV PUID=0
+ENV PGID=0
 
 
 # Copy root filesystem
