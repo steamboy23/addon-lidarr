@@ -1,3 +1,4 @@
+---
 build_from:
   aarch64: hotio/lidarr:pr-plugins-2.9.0.4506
   amd64: hotio/lidarr:pr-plugins-2.9.0.4506
