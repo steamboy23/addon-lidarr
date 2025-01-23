@@ -1,8 +1,8 @@
 ---
 build_from:
-  aarch64: hotio/lidarr:pr-plugins-2.9.0.4506
-  amd64: hotio/lidarr:pr-plugins-2.9.0.4506
-  armv7: hotio/lidarr:pr-plugins-2.9.0.4506
+  aarch64: hotio/lidarr:pr-plugins-2.9.5.4543
+  amd64: hotio/lidarr:pr-plugins-2.9.5.4543
+  armv7: hotio/lidarr:pr-plugins-2.9.5.4543
 codenotary:
   base_image: codenotary@frenck.dev
   signer: codenotary@frenck.dev
