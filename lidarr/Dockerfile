@@ -5,35 +5,6 @@ FROM hotio/lidarr:pr-plugins-2.9.0.4506
 # Set shell
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-# Setup base
-ARG LIDARR_VERSION=2.8.2.4493
-ARG BUILD_ARCH=amd64
-ARG BUILD_VERSION=dev
-ENV XDG_CONFIG_HOME="/config/xdg"
-# hadolint ignore=DL3003,DL3042
-RUN \
-  apk add --no-cache \
-    icu-libs=74.2-r0 \
-    sqlite-libs=3.47.1-r0 \
-    xmlstarlet=1.6.1-r2 \
-  \
-  && if [ "${BUILD_ARCH}" = "aarch64" ]; then LIDARR_ARCH="arm64"; \
-  elif [ "${BUILD_ARCH}" = "amd64" ]; then LIDARR_ARCH="x64"; \
-  elif [ "${BUILD_ARCH}" = "armv7" ]; then LIDARR_ARCH="arm"; fi \
-  \
-  && curl -J -L -o /tmp/lidarr.tar.gz \
-      "https://github.com/Lidarr/Lidarr/releases/download/v${LIDARR_VERSION}/Lidarr.master.${LIDARR_VERSION}.linux-musl-core-${LIDARR_ARCH}.tar.gz" \
-  && mkdir -p /opt/bin \
-  && tar zxvf \
-      /tmp/lidarr.tar.gz \
-      --strip 1 -C /opt/bin \
-  \
-  && echo -e "UpdateMethod=docker\nBranch=master\nPackageVersion=${BUILD_VERSION}\nPackageAuthor=Home Assistant Community Add-ons" \
-    > /opt/package_info \
-  \
-  && rm -f -r \
-    /tmp/* \
-    /opt/bin/Lidarr.Update
 
 # Copy root filesystem
 COPY rootfs /
