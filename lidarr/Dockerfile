@@ -10,10 +10,7 @@ FROM hotio/lidarr:pr-plugins-2.9.0.4506
 # Copy root filesystem
 COPY rootfs /
 
-COPY run.sh /
-RUN chmod a+x /run.sh
 
-CMD [ "/run.sh" ]
 
 # Labels
 LABEL \
