@@ -9,14 +9,12 @@ ENV PGID=0
 
 
 # Copy root filesystem
-COPY rootfs /
+#COPY rootfs /
 
-# Build arguments
-ARG BUILD_DATE
-ARG BUILD_DESCRIPTION
-ARG BUILD_NAME
-ARG BUILD_REF
-ARG BUILD_REPOSITORY
+COPY run.sh /
+RUN chmod a+x /run.sh
+
+CMD [ "/run.sh" ]
 
 # Labels
 LABEL \
