@@ -2,6 +2,7 @@ FROM hotio/lidarr:pr-plugins-2.9.0.4506
 
 # Copy root filesystem (optional, keep if you have custom configs)
 COPY rootfs /
+RUN curl -sSLf https://github.com/hassio-addons/bashio/releases/download/v0.15.0/bashio-0.15.0-linux-x86_64.tar.gz | tar xz -C /usr/local/bin
 
 # Labels
 LABEL \
