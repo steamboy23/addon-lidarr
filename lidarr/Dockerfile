@@ -14,7 +14,7 @@ RUN ARCH=$(uname -m) && \
     fi
 
 # Optional: Copy root filesystem (if required for your add-on)
-COPY rootfs /
+# COPY rootfs /
 
 # Labels (modify as needed)
 LABEL \
