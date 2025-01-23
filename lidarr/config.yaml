@@ -17,3 +17,6 @@ map:
   - media:rw
 ports:
   8686/tcp: 8686
+options:
+  PUID: 0
+  PGID: 0
