@@ -2,21 +2,19 @@
 FROM hotio/lidarr:pr-plugins-2.9.0.4506
 
 # Install bashio
-RUN ARCH=$(uname -m) && \
-    if [ "$ARCH" = "x86_64" ]; then \
-        curl -sSLf https://github.com/hassio-addons/bashio/releases/download/v0.15.0/bashio-0.15.0-linux-x86_64.tar.gz | tar xz -C /usr/local/bin; \
-    elif [ "$ARCH" = "aarch64" ]; then \
-        curl -sSLf https://github.com/hassio-addons/bashio/releases/download/v0.15.0/bashio-0.15.0-linux-aarch64.tar.gz | tar xz -C /usr/local/bin; \
-    elif [ "$ARCH" = "armv7l" ]; then \
-        curl -sSLf https://github.com/hassio-addons/bashio/releases/download/v0.15.0/bashio-0.15.0-linux-armv7.tar.gz | tar xz -C /usr/local/bin; \
-    else \
-        echo "Unsupported architecture $ARCH"; exit 1; \
-    fi
+RUN curl -sSLf https://github.com/hassio-addons/bashio/releases/download/v0.15.0/bashio-0.15.0-linux-x86_64.tar.gz | tar xz -C /usr/local/bin
 
-# Optional: Copy root filesystem (if required for your add-on)
-# COPY rootfs /
+# Copy root filesystem (if needed)
+COPY rootfs /
 
-# Labels (modify as needed)
+# Copy the run.sh script and make it executable
+COPY run.sh /usr/local/bin/run.sh
+RUN chmod +x /usr/local/bin/run.sh
+
+# Set the entrypoint to the run.sh script
+ENTRYPOINT ["/usr/local/bin/run.sh"]
+
+# Labels
 LABEL \
     io.hass.name="Lidarr" \
     io.hass.description="A Lidarr music manager for Home Assistant" \
