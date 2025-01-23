@@ -1,8 +1,8 @@
----
 build_from:
-  aarch64: ghcr.io/hassio-addons/base:17.1.0
-  amd64: ghcr.io/hassio-addons/base:17.1.0
-  armv7: ghcr.io/hassio-addons/base:17.1.0
+  aarch64: hotio/lidarr:pr-plugins-2.9.0.4506
+  amd64: hotio/lidarr:pr-plugins-2.9.0.4506
+  armv7: hotio/lidarr:pr-plugins-2.9.0.4506
 codenotary:
   base_image: codenotary@frenck.dev
   signer: codenotary@frenck.dev
+
