@@ -1,29 +1,66 @@
 # Base image
 FROM hotio/lidarr:pr-plugins-2.9.0.4506
 
-# Install bashio
-RUN curl -sSLf https://github.com/hassio-addons/bashio/releases/download/v0.15.0/bashio-0.15.0-linux-x86_64.tar.gz | tar xz -C /usr/local/bin
 
-# Copy root filesystem (if needed)
+# Set shell
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+# Setup base
+ARG LIDARR_VERSION=2.8.2.4493
+ARG BUILD_ARCH=amd64
+ARG BUILD_VERSION=dev
+ENV XDG_CONFIG_HOME="/config/xdg"
+# hadolint ignore=DL3003,DL3042
+RUN \
+  apk add --no-cache \
+    icu-libs=74.2-r0 \
+    sqlite-libs=3.47.1-r0 \
+    xmlstarlet=1.6.1-r2 \
+  \
+  && if [ "${BUILD_ARCH}" = "aarch64" ]; then LIDARR_ARCH="arm64"; \
+  elif [ "${BUILD_ARCH}" = "amd64" ]; then LIDARR_ARCH="x64"; \
+  elif [ "${BUILD_ARCH}" = "armv7" ]; then LIDARR_ARCH="arm"; fi \
+  \
+  && curl -J -L -o /tmp/lidarr.tar.gz \
+      "https://github.com/Lidarr/Lidarr/releases/download/v${LIDARR_VERSION}/Lidarr.master.${LIDARR_VERSION}.linux-musl-core-${LIDARR_ARCH}.tar.gz" \
+  && mkdir -p /opt/bin \
+  && tar zxvf \
+      /tmp/lidarr.tar.gz \
+      --strip 1 -C /opt/bin \
+  \
+  && echo -e "UpdateMethod=docker\nBranch=master\nPackageVersion=${BUILD_VERSION}\nPackageAuthor=Home Assistant Community Add-ons" \
+    > /opt/package_info \
+  \
+  && rm -f -r \
+    /tmp/* \
+    /opt/bin/Lidarr.Update
+
+# Copy root filesystem
 COPY rootfs /
 
-# Copy the run.sh script and make it executable
-COPY run.sh /usr/local/bin/run.sh
-RUN chmod +x /usr/local/bin/run.sh
-
-# Set the entrypoint to the run.sh script
-ENTRYPOINT ["/usr/local/bin/run.sh"]
+# Build arguments
+ARG BUILD_DATE
+ARG BUILD_DESCRIPTION
+ARG BUILD_NAME
+ARG BUILD_REF
+ARG BUILD_REPOSITORY
 
 # Labels
 LABEL \
-    io.hass.name="Lidarr" \
-    io.hass.description="A Lidarr music manager for Home Assistant" \
-    io.hass.arch="amd64" \
+    io.hass.name="${BUILD_NAME}" \
+    io.hass.description="${BUILD_DESCRIPTION}" \
+    io.hass.arch="${BUILD_ARCH}" \
     io.hass.type="addon" \
-    io.hass.version="pr-plugins-2.9.0.4506" \
-    maintainer="Your Name <your@email.com>" \
-    org.opencontainers.image.title="Lidarr" \
-    org.opencontainers.image.description="A Lidarr music manager" \
+    io.hass.version=${BUILD_VERSION} \
+    maintainer="Franck Nijhof <frenck@addons.community>" \
+    org.opencontainers.image.title="${BUILD_NAME}" \
+    org.opencontainers.image.description="${BUILD_DESCRIPTION}" \
+    org.opencontainers.image.vendor="Home Assistant Community Add-ons" \
+    org.opencontainers.image.authors="Franck Nijhof <frenck@addons.community>" \
     org.opencontainers.image.licenses="MIT" \
-    org.opencontainers.image.source="https://github.com/yourusername/addon-lidarr" \
-    org.opencontainers.image.documentation="https://github.com/yourusername/addon-lidarr/blob/main/README.md"
+    org.opencontainers.image.url="https://addons.community" \
+    org.opencontainers.image.source="https://github.com/${BUILD_REPOSITORY}" \
+    org.opencontainers.image.documentation="https://github.com/${BUILD_REPOSITORY}/blob/main/README.md" \
+    org.opencontainers.image.created=${BUILD_DATE} \
+    org.opencontainers.image.revision=${BUILD_REF} \
+    org.opencontainers.image.version=${BUILD_VERSION}
