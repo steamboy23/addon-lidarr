@@ -1,4 +1,4 @@
-ARG BUILD_FROM=hotio/lidarr:pr-plugins-2.9.0.4506
+ARG BUILD_FROM=hotio/lidarr:pr-plugins-2.9.5.4543
 FROM ${BUILD_FROM}
 
 # Set shell
@@ -6,7 +6,7 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # Arguments with default values
 ARG BUILD_ARCH=amd64
-ARG LIDARR_VERSION=2.9.0.4506
+ARG LIDARR_VERSION=2.9.5.4543
 ARG BUILD_VERSION=dev
 
 # Set environment
